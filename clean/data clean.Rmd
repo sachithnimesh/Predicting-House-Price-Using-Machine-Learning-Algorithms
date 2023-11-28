@@ -1,0 +1,241 @@
+---
+title: "data cleaning"
+output:
+  pdf_document: default
+  html_document: default
+date: "2023-10-21"
+---
+```{r}
+housing = read.csv('data1.csv')
+housing
+```
+
+```{r}
+dim(housing)
+```
+```{r}
+# Assuming 'housing' is a data frame in R
+summary_data <- summary(housing)
+summary_data <- t(summary_data)
+print(summary_data)
+
+```
+```{r}
+# Assuming 'housing' is a data frame in R
+str(housing)
+
+
+```
+
+Converting Datatype Variables
+I will need to convert the datatypes for the above datatypes to their appropriate classification. Some columns such as SALE PRICE is considered an object when it should be an float. And other columns such as NEIGHBORHOOD should be a categorical datatype rather than an object.
+
+This dataset only contains object and integer dtypes.
+
+```{r}
+# Assuming 'housing' is a data frame in R
+object_columns <- sapply(housing, class) == "character"
+print(names(housing[object_columns]))
+
+```
+```{r}
+# Assuming 'housing' is a data frame in R
+integer_columns <- sapply(housing, class) == "integer"
+print(names(housing[integer_columns]))
+
+```
+
+```{r}
+# Convert objects to categorical variables
+# Check if the columns exist
+for (colname in obj_cats) {
+  if (colname %in% colnames(housing)) {
+    # Column exists, proceed with conversion
+  } else {
+    cat(paste("Column", colname, "does not exist in the 'housing' data frame.\n"))
+  }
+}
+
+
+```
+
+```{r}
+# Convert numeric to categorical variables
+# Check if the columns exist
+for (colname in num_cats) {
+  if (colname %in% colnames(housing)) {
+    # Column exists, proceed with conversion
+  } else {
+    cat(paste("Column", colname, "does not exist in the 'housing' data frame.\n"))
+  }
+}
+
+```
+
+
+```{r}
+# Assuming 'housing' is a data frame in R
+str(housing)  # Provides information about data types and a summary of the data
+
+# To get a summary of the data frame
+summary(housing)  # Provides summary statistics for numeric columns
+
+# To count non-missing values in each column
+colSums(!is.na(housing))
+
+```
+
+```{r}
+head(housing)
+
+```
+```{r}
+str(housing)
+```
+
+```{r}
+# Assuming 'housing' is a data frame in R
+housing$BOROUGH <- as.character(housing$BOROUGH)  # Ensure 'BOROUGH' is character type
+
+# Use ifelse to replace numerical indicators with borough names
+housing$BOROUGH <- ifelse(housing$BOROUGH == "1", "Manhattan",
+                          ifelse(housing$BOROUGH == "2", "Bronx",
+                          ifelse(housing$BOROUGH == "3", "Brooklyn",
+                          ifelse(housing$BOROUGH == "4", "Queens",
+                          ifelse(housing$BOROUGH == "5", "Staten Island", housing$BOROUGH)))))
+
+```
+
+missing value 
+
+```{r}
+# Assuming 'housing' is a data frame in R
+# Use the apply function with is.na to check for missing values in each column
+missing_counts <- apply(housing, 2, function(x) sum(is.na(x)))
+
+# The missing_counts variable now contains the count of missing values for each column
+print(missing_counts)
+
+```
+
+
+```{r}
+# Assuming 'housing' is a data frame in R
+# Use the apply function with is.na to check for missing values in each column
+missing_counts <- apply(housing, 2, function(x) sum(is.na(x)))
+
+# Calculate the percentage of missing values for each column
+percentage_missing <- (missing_counts / nrow(housing)) * 100
+
+# The percentage_missing variable now contains the percentage of missing values for each column
+print(percentage_missing)
+
+```
+
+
+```{r}
+housing
+```
+
+theres no data in EASE.MENT AND APARTMENT.NUMBER colomns so we drop this
+
+```{r}
+# Assuming 'housing' is a data frame in R
+housing$EASEMENT <- NULL
+housing$APARTMENT.NUMBER = NULL
+```
+```{r}
+head(housing)
+```
+
+```{r}
+# Assuming 'housing' is a data frame in R
+# Load the graphics package
+library(graphics)
+
+# Create a matrix of missing values (1 for missing, 0 for not missing)
+missing_matrix <- ifelse(is.na(housing), 1, 0)
+
+# Set up the plot
+heatmap(missing_matrix, 
+        Colv = NA, 
+        Rowv = NA, 
+        col = c("red", 'green'),  # Specify colors for missing (grey) and non-missing (white)
+        xlab = "Columns", 
+        ylab = "Rows", 
+        main = "Missing Values Heatmap")
+
+```
+
+```{r}
+housing$EASE.MENT = NULL
+
+```
+
+
+drop null value cause theres huge data in this dset
+
+```{r}
+
+
+```
+
+
+
+```{r}
+str(housing)
+```
+```{r}
+housing
+
+```
+
+```{r}
+# Assuming 'housing' is a data frame in R
+# Load the graphics package
+library(graphics)
+
+# Create a matrix of missing values (1 for missing, 0 for not missing)
+missing_matrix <- ifelse(is.na(housing), 1, 0)
+
+# Set up the plot
+heatmap(missing_matrix, 
+        Colv = NA, 
+        Rowv = NA, 
+        col = c("red", 'green'),  # Specify colors for missing (grey) and non-missing (white)
+        xlab = "Columns", 
+        ylab = "Rows", 
+        main = "Missing Values Heatmap")
+```
+
+
+
+```{r}
+# Assuming 'housing' is a data frame in R
+# Remove rows with missing values
+data <- na.omit(housing)
+
+# Save the cleaned data to a CSV file
+write.csv(data, file = "data.csv", row.names = FALSE)
+
+```
+
+
+```{r}
+# Assuming 'housing' is a data frame in R
+# Load the graphics package
+library(graphics)
+
+# Create a matrix of missing values (1 for missing, 0 for not missing)
+missing_matrix <- ifelse(is.na(data), 0, 1)
+
+# Set up the plot
+heatmap(missing_matrix, 
+        Colv = NA, 
+        Rowv = NA, 
+        col = c("red", 'green'),  # Specify colors for missing (grey) and non-missing (white)
+        xlab = "Columns", 
+        ylab = "Rows", 
+        main = "Missing Values Heatmap")
+```
+
